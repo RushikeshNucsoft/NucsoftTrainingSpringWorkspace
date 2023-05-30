@@ -1,0 +1,76 @@
+package com.employee.department.mapping.entity;
+
+
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "employee")
+public class Employee {
+	
+	 @Id
+	 @Column(name = "emp_id")
+	 @GeneratedValue(strategy = GenerationType.AUTO, generator = "employee_generator")
+    private int empId;
+	 
+	 @Column(name = "emp_name")
+    private String empName;
+	 
+	
+	  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+	  @OnDelete(action = OnDeleteAction.CASCADE)
+	  @JoinColumn(name = "dep_id", nullable = false)
+	  @JsonIgnore
+	 private Department department;
+    
+    public Employee(int empId, String empName) {
+        this.empId = empId;
+        this.empName = empName;
+    }
+    
+    
+    
+    public Employee() {
+	
+		// TODO Auto-generated constructor stub
+	}
+
+
+
+	public int getEmpId() {
+        return empId;
+    }
+    
+    public void setEmpId(int empId) {
+        this.empId = empId;
+    }
+    
+    public String getEmpName() {
+        return empName;
+    }
+    
+    public void setEmpName(String empName) {
+        this.empName = empName;
+    }
+
+
+
+	public Department getDepartment() {
+		return department;
+	}
+
+
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+    
+    
+}
+

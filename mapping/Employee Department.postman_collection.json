@@ -1,0 +1,72 @@
+{
+	"info": {
+		"_postman_id": "5c1771a0-84ec-41d9-ba52-fe67f06d8d02",
+		"name": "Employee Department",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27632610"
+	},
+	"item": [
+		{
+			"name": "GetAllDepartments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/department/alldepartments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"department",
+						"alldepartments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetDepartmentByID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/department/6/department",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"department",
+						"6",
+						"department"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetEmployeesOfParticularDepartment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/department/2/employee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"department",
+						"2",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,52 @@
+package com.employee.department.mapping.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.*;
+
+@Table(name = "department")
+@Entity
+public class Department {
+	 
+	@Id
+	@Column(name = "dep_id")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "department_generator")
+	private int id;
+	
+	 @Column(name = "dep_name")
+    private String name;
+    
+    // Default constructor
+    public Department() {
+    }
+    
+    // Parameterized constructor
+    public Department(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    // Getters and setters for id and name
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    @JsonIgnore
+    public Object getHibernateLazyInitializer() {
+        // This method can be empty or return any desired value
+        return null;
+    }
+}
+

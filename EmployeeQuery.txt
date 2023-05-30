@@ -1,0 +1,15 @@
+-- public.employees definition
+
+-- Drop table
+
+-- DROP TABLE public.employees;
+
+CREATE TABLE public.employees (
+	id int8 NOT NULL,
+	"name" varchar(255) NULL,
+	age int4 NULL,
+	email varchar(255) NULL,
+	contact varchar(20) NULL,
+	city varchar(255) NULL,
+	CONSTRAINT employees_pkey PRIMARY KEY (id)
+);

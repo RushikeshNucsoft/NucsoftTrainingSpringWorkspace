@@ -1,0 +1,44 @@
+package com.example.employee.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.employee.entity.Employee;
+import com.example.employee.repository.EmployeeRepository;
+
+@Service
+public class EmployeeService {
+	
+	@Autowired
+    private EmployeeRepository employeeRepository;
+	
+	public Employee createEmployee(Employee employee) {
+        return employeeRepository.save(employee);
+	}
+	
+	public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
+    }
+	
+	public List<Employee> getEmployeesByAgeAndCity(int age, String city) {
+        return employeeRepository.findByAgeAndCity(age, city);
+	}
+	
+	public Employee updateEmployee(int id, Employee employee) {
+        Employee existingEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found with ID: " + id));
+
+        existingEmployee.setName(employee.getName());
+        existingEmployee.setAge(employee.getAge());
+        existingEmployee.setCity(employee.getCity());
+
+        return employeeRepository.save(existingEmployee);
+    }
+	
+	public void deleteEmployee(int id) {
+        employeeRepository.deleteById(id);
+    }
+
+}

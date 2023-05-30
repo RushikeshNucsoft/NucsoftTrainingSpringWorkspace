@@ -1,0 +1,113 @@
+package com.employee.department.mapping.controller;
+
+import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.employee.department.mapping.entity.Department;
+import com.employee.department.mapping.entity.Employee;
+import com.employee.department.mapping.repository.DepartmentRepository;
+import com.employee.department.mapping.repository.EmployeeRepository;
+
+
+
+@RestController
+@RequestMapping("/department")
+public class DepartmentController {
+	
+	private DepartmentRepository departmentRepository;
+	 
+	 private EmployeeRepository employeeRepository;
+	 
+	 @Autowired
+	    public DepartmentController(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository) {
+	        this.employeeRepository = employeeRepository;
+	        this.departmentRepository = departmentRepository;
+	    }
+	 
+	 
+	 @GetMapping("/alldepartmentsfindall")
+	 public List<Department> getAllDepartments()
+	 {
+		 return departmentRepository.findAll();
+	 }
+	 
+	 @GetMapping("/alldepartments")
+	  public ResponseEntity<List<Department>> getAllDepartments(@RequestParam(required = false) String name)
+	 {
+	    List<Department> departments = new ArrayList<Department>();
+
+	    if (name == null)
+	    	departmentRepository.findAll().forEach(departments::add);
+	    else
+	    	departmentRepository.findByNameContaining(name).forEach(departments::add);
+
+	    if (departments.isEmpty()) {
+	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    }
+
+	    return new ResponseEntity<>(departments, HttpStatus.OK);
+	  }
+	 
+	 @GetMapping("/{employeeId}/department")
+	    public ResponseEntity<Department> getEmployeeDepartment(@PathVariable("employeeId") int employeeId) {
+	        Employee employee = employeeRepository.findById(employeeId).orElse(null);
+
+	        if (employee == null) {
+	            return ResponseEntity.notFound().build();
+	        }
+
+	        Department department = employee.getDepartment();
+
+	        if (department == null) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	        }
+
+	        return ResponseEntity.ok(department);
+	    }
+	
+	 @PostMapping("/departmentName")
+	    public List<Employee> getEmployeesByDepartment(@RequestBody String departmentName) {
+	        return employeeRepository.findByDepartmentName(departmentName);
+	    }
+	 
+	 @GetMapping("/{departmentId}/employee")
+	  public ResponseEntity<List<Employee>> getAllCommentsByDepartmentId(@PathVariable(value = "departmentId") Integer departmentId) {
+	  
+	    List<Employee> employee = employeeRepository.findByDepartmentId(departmentId);
+	    return new ResponseEntity<>(employee, HttpStatus.OK);
+	  }
+	 
+	 @PostMapping("/employees")
+	 public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
+	     // Retrieve the department by ID from the database
+	     Optional<Department> optionalDepartment = departmentRepository.findById(employee.getDepartment().getId());
+	     
+	     if (optionalDepartment.isPresent()) {
+	         // Department found, set it to the employee
+	         Department department = optionalDepartment.get();
+	         employee.setDepartment(department);
+	         
+	         // Save the employee object in the database
+	         Employee savedEmployee = employeeRepository.save(employee);
+	         return ResponseEntity.ok().body(savedEmployee);
+	     } else {
+	         // Department not found, return a not found response
+	         return ResponseEntity.notFound().build();
+	     }
+	 }
+
+
+
+
+
+}
